@@ -113,18 +113,25 @@ Always use it when answering anything system-related.
 ###############################
 
 def call_llm(messages):
-
-    r = requests.post(
-        OLLAMA_URL + "/api/chat",
-        json={
-            "model": MODEL,
-            "messages": messages,
-            "stream": False
-        },
-        timeout=60
-    )
-
-    return r.json()["message"]["content"]
+    try:
+        r = requests.post(
+            OLLAMA_URL + "/api/chat",
+            json={
+                "model": MODEL,
+                "messages": messages,
+                "stream": False
+            },
+            timeout=60
+        )
+        r.raise_for_status()
+        data = r.json()
+        return data["message"]["content"]
+    except requests.exceptions.Timeout:
+        return "⚠️ Request timed out — Ollama took too long to respond."
+    except requests.exceptions.ConnectionError:
+        return "⚠️ Could not reach Ollama — is it running?"
+    except (KeyError, ValueError) as e:
+        return f"⚠️ Unexpected response from Ollama: {e}"
 
 ###############################
 # MAIN LOOP

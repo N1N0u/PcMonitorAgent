@@ -1,3 +1,4 @@
+import logging
 import requests
 import time
 
@@ -146,7 +147,7 @@ def get_system_metrics() -> dict:
             services[job] = value
     except Exception as e:
         services = {}
-        print(f"[WARN] Could not fetch services: {e}")
+        logging.warning("Could not fetch services: %s", e)
 
     return {
         "cpu_percent":        round(cpu["value"],            2) if cpu["status"]            == "success" else None,

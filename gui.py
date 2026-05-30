@@ -389,12 +389,12 @@ html,body{height:100%;background:var(--bg);color:var(--text);
     <!-- chat -->
     <div id="chat-col">
       <div id="chat-hdr">
-        <div class="title">⬡ Alex</div>
+        <div class="title">⬡ N1n@u</div>
         <div id="typing"></div>
       </div>
       <div id="chat-log">
         <div class="msg alex">
-          <div class="msg-role alex">Alex</div>
+          <div class="msg-role alex">N1n@u</div>
           <div class="msg-body" id="welcome-body">Checking Ollama…</div>
         </div>
       </div>
@@ -514,6 +514,9 @@ on('panels_ready', d => {
       if(c) drawPanel(c, p.series);
     });
   });
+
+  // Send panel data to Python so N1n@u can use it as chat context
+  window.pywebview.api.store_dashboard_ctx(d.panels);
 });
 
 function placeholder(msg){
@@ -659,7 +662,7 @@ async function sendChat(){
 on('chat_reply', d=>{
   document.getElementById('send-btn').disabled = false;
   document.getElementById('typing').textContent = '';
-  addMsg('Alex', d.error ? '⚠ '+d.error : d.reply);
+  addMsg("N1n@u", d.error ? '⚠ '+d.error : d.reply);
   document.getElementById('chat-inp').focus();
 });
 
